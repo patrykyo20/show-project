@@ -52,6 +52,7 @@ jobs:
         with:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+        working-directory: ./portfolio-client
       
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -63,9 +64,10 @@ jobs:
         with:
           path: |
             .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('portfolio-client/**/package-lock.json', 'portfolio-client/**/yarn.lock') }}-${{ hashFiles('portfolio-client/**.[jt]s', 'portfolio-client/**.[jt]sx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+            ${{ runner.os }}-nextjs-${{ hashFiles('portfolio-client/**/package-lock.json', 'portfolio-client/**/yarn.lock') }}-
+        working-directory: ./portfolio-client
       
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
