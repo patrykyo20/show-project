@@ -17,9 +17,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: portfolio-client
 
     steps:
       - name: Checkout repository
@@ -33,14 +30,16 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: show-project/portfolio-client
 
       - name: Build with Next.js
         run: npm run build
+        working-directory: show-project/portfolio-client
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./portfolio-client/out
+          path: ./show-project/portfolio-client/out
 
   deploy:
     environment:
