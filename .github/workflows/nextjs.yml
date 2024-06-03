@@ -17,23 +17,25 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portfolio-client
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18.17.0'
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
-        working-directory: ./portfolio-client
 
       - name: Build with Next.js
         run: npm run build
-        working-directory: ./portfolio-client
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
