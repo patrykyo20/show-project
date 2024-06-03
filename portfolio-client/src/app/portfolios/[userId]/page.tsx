@@ -11,9 +11,6 @@ const PortfoliosForUser = ({ params }: { params: { userId: string }}) => {
   const { user } = useUser();
   const searchParams = useSearchParams();
 
-  console.log(userId)
-
-
   const page = parseInt(searchParams.get('page') || '1', 10);
   const pagePerSize = parseInt(searchParams.get('pagePerSize') || '9', 10);
   const order = searchParams.get('order') || 'asc';
@@ -26,8 +23,6 @@ const PortfoliosForUser = ({ params }: { params: { userId: string }}) => {
     order,
     sort,
   });
-
-  console.log(projects)
   
   return (
     <>

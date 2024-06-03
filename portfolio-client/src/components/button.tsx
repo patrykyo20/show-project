@@ -8,7 +8,7 @@ interface ButtonProps {
   text: string;
   active?: boolean;
   type?: "button" | "submit" | "reset";
-  onClick?: (projectId: number | undefined) => void;
+  onClick?: () => void;
 };
 
 const Button: FC<ButtonProps> = ({

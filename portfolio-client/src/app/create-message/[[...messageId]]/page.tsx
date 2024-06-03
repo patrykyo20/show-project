@@ -16,7 +16,7 @@ const CreateMessage = ({ params }: { params: { messageId: number } }) => {
   const router = useRouter()
 
   const messageId = params.messageId;
-  const { data: message } = useGetMessageQuery(messageId);
+  const { data: message, error } = useGetMessageQuery({id: messageId});
 
   const [title, setTitle] = useState<string>('');
   const [text, setText] = useState<string>('');
@@ -78,22 +78,25 @@ const CreateMessage = ({ params }: { params: { messageId: number } }) => {
         responseData = await patchMessage({ id: messageId, data });
 
       } else {
+        if (!user) {
+          return;
+        }
+
         const data = {
           title,
           message: text,
-          userId: user?.id,
-          author: user?.fullName,
-          authorImage: user?.imageUrl,
+          userId: user.id,
+          author: user.fullName ?? 'Unknown Author',
+          authorImage: user.imageUrl,
         };
       
         responseData = await addMessage({ data });
       }
 
-      if (responseData.error) {
-        console.error('Błąd odpowiedzi:', responseData.error);
+      if (error) {
+        console.error(error);
         setStatus('error');
       } else {
-        console.log('Otrzymana treść odpowiedzi:', responseData.data);
         setStatus('success');
 
         setTimeout(() => {

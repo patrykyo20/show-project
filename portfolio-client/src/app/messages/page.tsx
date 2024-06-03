@@ -4,7 +4,6 @@ import React, { useEffect } from 'react'
 import { useSearchParams } from 'next/navigation';
 import { useGetAllMessagesQuery, useGetMessagesLengthQuery } from '@/lib/slices/projects/messagesApi';
 import MessageCatalog from '../components/MessageCatalog';
-import { Metadata } from 'next';
 
 const Messages = () => {
   const searchParams = useSearchParams();
@@ -26,8 +25,6 @@ const Messages = () => {
   useEffect(() => {
     refetch()
   }, [page, pagePerSize, order, sort, refetch]);
-
-  console.log(messages)
   
   return (
     <>
@@ -37,7 +34,7 @@ const Messages = () => {
         All Messages
       </h1>
 
-      <MessageCatalog messages={messages} messagesLength={messagesLength ? messagesLength.length : 0} page={page} pagePerSize={pagePerSize} />
+      <MessageCatalog messages={messages} messagesLength={messagesLength ?? 0} page={page} pagePerSize={pagePerSize} />
     </>
   );
 };

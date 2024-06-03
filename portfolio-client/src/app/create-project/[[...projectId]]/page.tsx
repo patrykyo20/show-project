@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 
 interface Technology {
   name: string;
-  id: number;
+  id: number | null;
 };
 
 type TechnologiesList = Technology[];
@@ -24,7 +24,7 @@ const CreateProject = ({ params }: { params: { projectId: number } }) => {
   const router = useRouter()
 
   const projectId = params.projectId;
-  const { data: project } = useGetProjectQuery(projectId);
+  const { data: project, error } = useGetProjectQuery({id: projectId});
 
   const [title, setTitle] = useState<string>('');
   const [repository, setRepository] = useState<string>('');
@@ -95,8 +95,6 @@ const CreateProject = ({ params }: { params: { projectId: number } }) => {
     try {
       let responseData;
 
-      console.log(selectedTechnologies.map((tech) => tech.name))
-
       if (project) {
         const data = {
           ...project, 
@@ -107,13 +105,14 @@ const CreateProject = ({ params }: { params: { projectId: number } }) => {
           repository,
           linkedin,
         };
-
-        console.log(data)
       
         responseData = await patchProject({ id: projectId, data });
 
-        console.log(responseData)
       } else {
+        if (!user) {
+          return;
+        }
+
         const data = {
           title,
           repository,
@@ -121,17 +120,16 @@ const CreateProject = ({ params }: { params: { projectId: number } }) => {
           linkedin,
           image,
           technologies: selectedTechnologies.map((tech) => tech.name),
-          userId: user?.id,
+          userId: user.id,
         };
       
         responseData = await addProject({ data });
       }
 
-      if (responseData.error) {
-        console.error('Błąd odpowiedzi:', responseData.error);
+      if (error) {
+        console.error('Błąd odpowiedzi:', error);
         setStatus('error');
       } else {
-        console.log('Otrzymana treść odpowiedzi:', responseData.data);
         setStatus('success');
 
         setTimeout(() => {

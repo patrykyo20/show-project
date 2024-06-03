@@ -1,5 +1,5 @@
 interface Message {
-  id: number;
+  id?: number;
   title: string;
   message: string;
   likes?: string[];

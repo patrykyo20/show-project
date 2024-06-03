@@ -18,7 +18,7 @@ const ProjectPage = ({ params }: { params: { id: number }}) => {
 
   const timeoutRef = useRef<any>(null);
 
-  const { data: project, error } = useGetProjectQuery(id);
+  const { data: project, error } = useGetProjectQuery({ id });
 
   const { data: projects } = useGetAllProjectsQuery({
     page: 1,
@@ -48,11 +48,21 @@ const ProjectPage = ({ params }: { params: { id: number }}) => {
 
       setLikes(updatedLikes);
 
-      const updatedData = { ...project, likes: updatedLikes };
-
+      const updatedData = {
+        ...project,
+        likes: updatedLikes,
+        image: project?.image || 'default-image-url',  
+        title: project?.title || 'Default Title',
+        description: project?.description || 'Default Description', 
+        technologies: project?.technologies || [],
+        visits: project?.visits || 0,
+        repository: project?.repository || '',
+        linkedin: project?.linkedin || '',
+        userId: project?.userId || '',
+      };
+  
       try {
         await addLikes({ id: project?.id, data: updatedData });
-        console.log('Project likes updated successfully');
       } catch (err) {
         console.error('Error updating project likes:', err);
       }
@@ -83,10 +93,9 @@ const ProjectPage = ({ params }: { params: { id: number }}) => {
 
   }, [project, addVisits]);
 
-  const handleDeleteProject = async (projectId: number) => {
+  const handleDeleteProject = async (projectId: number | undefined) => {
     try {
       await deleteProject({ id: projectId });
-      console.log(`Project with ID ${projectId} deleted successfully.`);
     } catch (error) {
       console.error('Error deleting project:', error);
     }

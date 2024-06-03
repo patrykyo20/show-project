@@ -34,7 +34,6 @@ const MessageCard: FC<MessageCardProps> = ({ message }) => {
 
       try {
         await addLikes({ id: message.id, data: updatedData });
-        console.log('Project likes updated successfully');
       } catch (err) {
         console.error('Error updating project likes:', err);
       }

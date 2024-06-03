@@ -20,7 +20,7 @@ const Projects = () => {
     sort
   });
 
-  const { data: projectsLength } = useGetProjectsLengthQuery(null);
+  const { data: projectsLength } = useGetProjectsLengthQuery();
 
   useEffect(() => {
     refetch()
@@ -34,7 +34,7 @@ const Projects = () => {
         All Projects
       </h1>
 
-      <ProjectCatalog projects={projects} projectsLength={projectsLength ? projectsLength.length : 0} page={page} pagePerSize={pagePerSize} />
+      <ProjectCatalog projects={projects} projectsLength={projectsLength ?? 0} page={page} pagePerSize={pagePerSize} />
     </>
   );
 };

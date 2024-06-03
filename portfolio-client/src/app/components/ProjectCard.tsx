@@ -33,7 +33,6 @@ const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
 
       try {
         await addLikes({ id: project.id, data: updatedData });
-        console.log('Project likes updated successfully');
       } catch (err) {
         console.error('Error updating project likes:', err);
       }

@@ -8,14 +8,14 @@ import SkeletonMessageCard from "./SkeletonMessageCard";
 
 interface MessageCatalogProps {
   messages: Message[] | undefined;
-  projectsLength: number;
+  messagesLength: number;
   page: number;
   pagePerSize: number;
 }
 
 const MessageCatalog: FC<MessageCatalogProps> = ({
   messages,
-  projectsLength,
+  messagesLength,
   page,
   pagePerSize,
 }) => {
@@ -94,7 +94,7 @@ const MessageCatalog: FC<MessageCatalogProps> = ({
         )}
       </section>
 
-      {projectsLength &&
+      {messagesLength &&
         <nav aria-label="Page navigation example transition-all">
           <ul className="-space-x-px text-base h-10 mt-20 flex justify-center gap-3 transition-all">
             <li>
@@ -112,7 +112,7 @@ const MessageCatalog: FC<MessageCatalogProps> = ({
                 Previous
               </button>
             </li>
-            {Array.from({ length: Math.ceil(projectsLength / pagePerSize) }, (_, index) => (
+            {Array.from({ length: Math.ceil(messagesLength / pagePerSize) }, (_, index) => (
               <li key={index + 1}>
                 <button
                   className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border
@@ -131,9 +131,9 @@ const MessageCatalog: FC<MessageCatalogProps> = ({
             ))}
             <li>
               <button
-                disabled={page === Math.ceil(projectsLength / pagePerSize)}
+                disabled={page === Math.ceil(messagesLength / pagePerSize)}
                 className={`flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border
-                  border-gray-300 rounded-lg ${page === Math.ceil(projectsLength / pagePerSize) ?
+                  border-gray-300 rounded-lg ${page === Math.ceil(messagesLength / pagePerSize) ?
                   'text-textPrimary' : 'text-textSecondary'}`}
                 onClick={(event) => {
                   const button = event.target as HTMLButtonElement;

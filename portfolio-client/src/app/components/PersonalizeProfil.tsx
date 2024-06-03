@@ -15,8 +15,6 @@ const PersonalizeProfile = () => {
     color: 'transparent'
   };
 
-  console.log(user)
-
   return (
     <section className="bg-primary min-h-80 flex flex-col items-center p-[31px]">
       <h1

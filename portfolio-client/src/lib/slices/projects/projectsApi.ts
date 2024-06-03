@@ -33,14 +33,14 @@ export const projectApi = createApi({
         body: data,
       }),
     }),
-    addVisits: builder.mutation<Project, { id: number | undefined; data: Project | undefined }>({
+    addVisits: builder.mutation<Project, { id: number | undefined; data: Project }>({
       query: ({ id, data }) => ({
         url: `/${id}`,
         method: 'PATCH',
         body: data,
       }),
     }),
-    patchProject: builder.mutation<Project, { id: number | undefined; data: Project }>({
+    patchProject: builder.mutation<Project, { id: number; data: Project }>({
       query: ({ id, data }) => ({
         url: `/${id}`,
         method: 'PATCH',
@@ -57,7 +57,7 @@ export const projectApi = createApi({
         body: JSON.stringify(data),
       }),
     }),
-    deleteProject: builder.mutation<Project, { id: number }>({
+    deleteProject: builder.mutation<Project, { id: number | undefined }>({
       query: ({ id }) => ({
         url: `/${id}`,
         method: 'DELETE',

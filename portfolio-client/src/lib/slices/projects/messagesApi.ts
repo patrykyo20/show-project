@@ -26,7 +26,7 @@ export const messageApi = createApi({
         url: `/user/${userId}?page=${page}&pagePerSize=${pagePerSize}&order=${order}&sort=${sort}`,
       }),
     }),
-    addLikes: builder.mutation<Message, { id: number | undefined; data: Message | undefined }>({
+    addLikes: builder.mutation<Message, { id: number | undefined; data: Message }>({
       query: ({ id, data }) => ({
         url: `/${id}`,
         method: 'PATCH',
@@ -40,7 +40,7 @@ export const messageApi = createApi({
         body: data,
       }),
     }),
-    patchMessage: builder.mutation<Message, { id: number | undefined; data: Message }>({
+    patchMessage: builder.mutation<Message, { id: number; data: Message }>({
       query: ({ id, data }) => ({
         url: `/${id}`,
         method: 'PATCH',
@@ -57,7 +57,7 @@ export const messageApi = createApi({
         body: JSON.stringify(data),
       }),
     }),
-    deleteMessage: builder.mutation<Message, { id: number }>({
+    deleteMessage: builder.mutation<Message, { id: number | undefined }>({
       query: ({ id }) => ({
         url: `/${id}`,
         method: 'DELETE',

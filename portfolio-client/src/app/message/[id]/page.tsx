@@ -22,7 +22,7 @@ const Message = ({ params }: { params: { id: number }}) => {
 
   const timeoutRef = useRef<any>(null);
 
-  const { data: message, error } = useGetMessageQuery(id);
+  const { data: message, error } = useGetMessageQuery({ id });
 
   const { data: projects } = useGetAllProjectsQuery({
     page: 1,
@@ -52,11 +52,23 @@ const Message = ({ params }: { params: { id: number }}) => {
 
       setLikes(updatedLikes);
 
-      const updatedData = { ...message, likes: updatedLikes };
+      if (!message) {
+        return;
+      }
+    
+      const updatedData = {
+        ...message,
+        likes: updatedLikes,
+        title: message.title,
+        message: message.message, 
+        visits: message.visits,
+        userId: message.userId,
+        author: message.author,
+        authorImage: message.authorImage,
+      };
 
       try {
         await addLikes({ id: message?.id, data: updatedData });
-        console.log('Project likes updated successfully');
       } catch (err) {
         console.error('Error updating project likes:', err);
       }
@@ -87,10 +99,9 @@ const Message = ({ params }: { params: { id: number }}) => {
 
   }, [message, addVisits]);
 
-  const handleDeleteMessage = async (messageId: number) => {
+  const handleDeleteMessage = async (messageId: number | undefined) => {
     try {
       await deleteMessage({ id: messageId });
-      console.log(`Project with ID ${messageId} deleted successfully.`);
     } catch (error) {
       console.error('Error deleting project:', error);
     }
