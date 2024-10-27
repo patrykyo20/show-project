@@ -1,7 +1,14 @@
-'use client';
+"use client";
 
 import { useUser } from "@clerk/nextjs";
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useMemo, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useMemo,
+  useState,
+} from "react";
 import Button from "@/components/button";
 import {
   useAddMessageMutation,
@@ -13,16 +20,16 @@ import { useRouter } from "next/navigation";
 
 const CreateMessage = ({ params }: { params: { messageId: number } }) => {
   const { user } = useUser();
-  const router = useRouter()
+  const router = useRouter();
 
   const messageId = params.messageId;
-  const { data: message, error } = useGetMessageQuery({id: messageId});
+  const { data: message, error } = useGetMessageQuery({ id: messageId });
 
-  const [title, setTitle] = useState<string>('');
-  const [text, setText] = useState<string>('');
-  const [previewSource, setPreviewSource] = useState<string>('');
+  const [title, setTitle] = useState<string>("");
+  const [text, setText] = useState<string>("");
+  const [previewSource, setPreviewSource] = useState<string>("");
 
-  const [status, setStatus] = useState<string>('');
+  const [status, setStatus] = useState<string>("");
 
   const [addMessage] = useAddMessageMutation();
   const [patchMessage] = usePatchMessageMutation();
@@ -31,7 +38,7 @@ const CreateMessage = ({ params }: { params: { messageId: number } }) => {
     if (message) {
       setTitle(message.title);
       setText(message.message);
-    };
+    }
   }, [message]);
 
   const handleSetInput = (
@@ -39,14 +46,6 @@ const CreateMessage = ({ params }: { params: { messageId: number } }) => {
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     method(event.target.value);
-  };
-
-  const handleInputImage = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const image: File = files[0];
-      previewImage(image);
-    }
   };
 
   const previewImage = (file: Blob) => {
@@ -66,17 +65,14 @@ const CreateMessage = ({ params }: { params: { messageId: number } }) => {
     try {
       let responseData;
 
-
       if (message) {
         const data = {
-          ...message, 
+          ...message,
           title,
           message: text,
         };
 
-      
         responseData = await patchMessage({ id: messageId, data });
-
       } else {
         if (!user) {
           return;
@@ -86,41 +82,41 @@ const CreateMessage = ({ params }: { params: { messageId: number } }) => {
           title,
           message: text,
           userId: user.id,
-          author: user.fullName ?? 'Unknown Author',
+          author: user.fullName ?? "Unknown Author",
           authorImage: user.imageUrl,
         };
-      
+
         responseData = await addMessage({ data });
       }
 
       if (error) {
         console.error(error);
-        setStatus('error');
+        setStatus("error");
       } else {
-        setStatus('success');
+        setStatus("success");
 
         setTimeout(() => {
           if (messageId) {
-            router.push(`/message/${messageId}`)
+            router.push(`/message/${messageId}`);
           } else {
-            router.push('/messages')
+            router.push("/messages");
           }
-        }, 3000)
+        }, 3000);
       }
     } catch (error) {
-      console.error('Błąd podczas wysyłania zapytania:', error);
+      console.error("Błąd podczas wysyłania zapytania:", error);
     }
   };
 
   return (
     <main className="grid place-items-center min-h-screen relative mb-20">
       {!user ? (
-        'loading'
+        "loading"
       ) : (
-        <section
-          className="w-[90%] lg:w-[68%] px-[10px] md:px-[72px] xl:px-[100px] pt-[30px] lg:pt-[78px] pb-[64px] border-t-2 border-l-2 border-r-2 border-headline border-b-4 rounded-t-20 rounded-r-20 rounded-l-20 rounded-xl shadow-customShadow text-white"
-        >
-          <h1 className="text-center text-textSecondary text-[34px] font-bold">Create your message</h1>
+        <section className="w-[90%] lg:w-[68%] px-[10px] md:px-[72px] xl:px-[100px] pt-[30px] lg:pt-[78px] pb-[64px] border-t-2 border-l-2 border-r-2 border-headline border-b-4 rounded-t-20 rounded-r-20 rounded-l-20 rounded-xl shadow-customShadow text-white">
+          <h1 className="text-center text-textSecondary text-[34px] font-bold">
+            Create your message
+          </h1>
           <form className="w-full mt-[50px]" onSubmit={handleCreateMessage}>
             <div className="flex flex-wrap -mx-3 mb-6 px-3">
               <label
@@ -157,14 +153,16 @@ const CreateMessage = ({ params }: { params: { messageId: number } }) => {
                 />
               </div>
             </div>
-  
+
             <div className="flex w-full justify-end mt-10">
               <Button px={4} py={2} text={"Save"} type="submit" />
             </div>
           </form>
         </section>
       )}
-      {status === 'success' && <Modal text={"Succesfully added message"} type="success"  />}
+      {status === "success" && (
+        <Modal text={"Succesfully added message"} type="success" />
+      )}
     </main>
   );
 };
